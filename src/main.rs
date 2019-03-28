@@ -41,7 +41,14 @@ struct AddTemplate {}
 struct Restaurant {
     id: i32,
     name: String,
-    last_visited_date: String,
+    last_visit_date: String,
+}
+
+#[derive(Insertable)]
+#[table_name = "restaurant"]
+struct NewRestaurant {
+    name: String,
+    last_visit_date: String,
 }
 
 mod errors {
@@ -68,6 +75,7 @@ mod schema {
         }
     }
 }
+use self::schema::restaurant;
 
 fn create_db_connection() -> ConnectionResult<SqliteConnection> {
     SqliteConnection::establish("lunch_order.db")
@@ -79,6 +87,14 @@ fn get_restaurants() -> errors::LunchOrderResult<Vec<Restaurant>> {
         .order(schema::restaurant::last_visit_date.desc())
         .load(&db_connection)?;
     Ok(restaurants)
+}
+
+fn create_restaurant(restaurant: &NewRestaurant) -> errors::LunchOrderResult<()> {
+    let db_connection = create_db_connection()?;
+    diesel::insert_into(schema::restaurant::table)
+        .values(restaurant)
+        .execute(&db_connection)?;
+    Ok(())
 }
 
 fn index(request: &mut Request) -> IronResult<Response> {
