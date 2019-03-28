@@ -6,6 +6,7 @@ extern crate error_chain;
 extern crate iron;
 
 use askama::Template;
+use chrono::offset::Local;
 use diesel::{
     connection::Connection,
     ExpressionMethods,
@@ -99,6 +100,14 @@ fn create_restaurant(restaurant: &NewRestaurant) -> errors::LunchOrderResult<()>
     Ok(())
 }
 
+fn update_restaurant(id: i32, visit_date: String) -> errors::LunchOrderResult<()> {
+    let db_connection = create_db_connection()?;
+    diesel::update(restaurant::table.find(id))
+        .set(restaurant::last_visit_date.eq(visit_date))
+        .execute(&db_connection)?;
+    Ok(())
+}
+
 fn index(_request: &mut Request) -> IronResult<Response> {
     let restaurant_list = itry!(get_restaurants());
     Ok(
@@ -127,6 +136,15 @@ fn add(request: &mut Request) -> IronResult<Response> {
     )))
 }
 
+fn visit(request: &mut Request) -> IronResult<Response> {
+    let id: i32 = itry!(request.extensions.get::<Router>().unwrap().find("id").unwrap().parse());
+    itry!(update_restaurant(id, Local::now().to_rfc3339()));
+    Ok(Response::with((
+        status::SeeOther,
+        RedirectRaw("/".to_string()),
+    )))
+}
+
 fn main() {
     env_logger::init();
 
@@ -134,6 +152,7 @@ fn main() {
     router.get("/", index, "home");
     router.get("/add", add_form, "add_form");
     router.post("/add", add, "add");
+    router.post("/visit/:id", visit, "visit");
 
     let mut chain = Chain::new(router);
 
