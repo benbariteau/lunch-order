@@ -98,7 +98,7 @@ fn create_restaurant(restaurant: &NewRestaurant) -> errors::LunchOrderResult<()>
     Ok(())
 }
 
-fn index(request: &mut Request) -> IronResult<Response> {
+fn index(_request: &mut Request) -> IronResult<Response> {
     let restaurant_names = itry!(get_restaurants())
         .into_iter()
         .map(|restaurant| restaurant.name)
@@ -111,7 +111,7 @@ fn index(request: &mut Request) -> IronResult<Response> {
     )
 }
 
-fn add_form(request: &mut Request) -> IronResult<Response> {
+fn add_form(_request: &mut Request) -> IronResult<Response> {
     Ok(Response::with((
         status::Ok,
         AddTemplate{},
