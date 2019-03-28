@@ -8,7 +8,6 @@ extern crate iron;
 use askama::Template;
 use diesel::{
     connection::Connection,
-    deserialize::Queryable,
     ExpressionMethods,
     QueryDsl,
     RunQueryDsl,
