@@ -9,7 +9,7 @@
         <div>
             {% for restaurant in restaurant_list %}
                 <li>{{restaurant.name|e}}
-                    (<form action="/visit/{{ restaurant.id }}" method="POST" style="display: inline-block; margin-block-end: 0;"><input type="submit" value="mark visited"></form>)
+                    <form action="/visit/{{ restaurant.id }}" method="POST" style="display: inline-block; margin-block-end: 0;"><input type="submit" value="mark visited"></form>
                 </li>
             {% endfor %}
         </div>
