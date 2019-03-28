@@ -1,6 +1,3 @@
-extern crate iron;
-extern crate router;
-
 use askama::Template;
 use iron::{
     Chain,
