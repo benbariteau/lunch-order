@@ -19,6 +19,7 @@ use iron::{
     Chain,
     Iron,
     IronResult,
+    modifiers::RedirectRaw,
     Request,
     Response,
     status,
@@ -123,7 +124,10 @@ fn add(request: &mut Request) -> IronResult<Response> {
     itry!(request.body.read_to_string(&mut body));
     let new_restaurant: NewRestaurant = itry!(serde_urlencoded::from_str(&body));
     itry!(create_restaurant(&new_restaurant));
-    Ok(Response::new())
+    Ok(Response::with((
+        status::SeeOther,
+        RedirectRaw("/".to_string()),
+    )))
 }
 
 fn main() {
