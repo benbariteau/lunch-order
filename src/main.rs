@@ -2,7 +2,14 @@ extern crate iron;
 extern crate router;
 
 use askama::Template;
-use iron::{Request, Response, IronResult, Chain, Iron, status};
+use iron::{
+    Chain,
+    Iron,
+    IronResult,
+    Request,
+    Response,
+    status,
+};
 use router::Router;
 
 #[derive(Template)]
