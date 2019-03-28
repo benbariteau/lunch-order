@@ -26,6 +26,8 @@ use iron::{
 };
 use logger::Logger;
 use router::Router;
+use serde::Deserialize;
+use std::io::Read;
 
 #[derive(Template)]
 #[template(path = "index.html")]
@@ -44,7 +46,7 @@ struct Restaurant {
     last_visit_date: String,
 }
 
-#[derive(Insertable)]
+#[derive(Insertable, Deserialize)]
 #[table_name = "restaurant"]
 struct NewRestaurant {
     name: String,
@@ -117,12 +119,21 @@ fn add_form(request: &mut Request) -> IronResult<Response> {
     )))
 }
 
+fn add(request: &mut Request) -> IronResult<Response> {
+    let mut body = String::new();
+    itry!(request.body.read_to_string(&mut body));
+    let new_restaurant: NewRestaurant = itry!(serde_urlencoded::from_str(&body));
+    itry!(create_restaurant(&new_restaurant));
+    Ok(Response::new())
+}
+
 fn main() {
     env_logger::init();
 
     let mut router = Router::new();
     router.get("/", index, "home");
     router.get("/add", add_form, "add_form");
+    router.post("/add", add, "add");
 
     let mut chain = Chain::new(router);
 
