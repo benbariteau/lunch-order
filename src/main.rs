@@ -1,16 +1,28 @@
 extern crate iron;
 extern crate router;
 
-use iron::{Request, Response, IronResult, Chain, Iron};
+use askama::Template;
+use iron::{Request, Response, IronResult, Chain, Iron, status};
 use router::Router;
 
-fn hello_world(request: &mut Request) -> IronResult<Response> {
-    Ok(Response::with((iron::status::Ok, "Hello World")))
+#[derive(Template)]
+#[template(path = "index.html")]
+struct IndexTemplate {
+    restaurant_list: Vec<String>
+}
+
+fn index(request: &mut Request) -> IronResult<Response> {
+    Ok(
+        Response::with((
+            status::Ok,
+            IndexTemplate{restaurant_list: vec![]},
+        ))
+    )
 }
 
 fn main() {
     let mut router = Router::new();
-    router.get("/", hello_world, "home");
-    let mut chain = Chain::new(hello_world);
+    router.get("/", index, "home");
+    let mut chain = Chain::new(router);
     Iron::new(chain).http("localhost:8080").unwrap();
 }
