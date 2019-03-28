@@ -33,6 +33,10 @@ struct IndexTemplate {
     restaurant_list: Vec<String>
 }
 
+#[derive(Template)]
+#[template(path = "add.html")]
+struct AddTemplate {}
+
 #[derive(Queryable)]
 struct Restaurant {
     id: i32,
@@ -90,11 +94,19 @@ fn index(request: &mut Request) -> IronResult<Response> {
     )
 }
 
+fn add_form(request: &mut Request) -> IronResult<Response> {
+    Ok(Response::with((
+        status::Ok,
+        AddTemplate{},
+    )))
+}
+
 fn main() {
     env_logger::init();
 
     let mut router = Router::new();
     router.get("/", index, "home");
+    router.get("/add", add_form, "add_form");
 
     let mut chain = Chain::new(router);
 
