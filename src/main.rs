@@ -6,15 +6,15 @@ extern crate error_chain;
 extern crate iron;
 
 use askama::Template;
-use diesel::connection::Connection;
-use diesel::deserialize::Queryable;
 use diesel::{
+    connection::Connection,
+    deserialize::Queryable,
     ExpressionMethods,
     QueryDsl,
     RunQueryDsl,
+    result::ConnectionResult,
+    sqlite::SqliteConnection,
 };
-use diesel::result::ConnectionResult;
-use diesel::sqlite::SqliteConnection;
 use env_logger;
 use iron::{
     Chain,
