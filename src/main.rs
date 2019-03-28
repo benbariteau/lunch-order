@@ -32,7 +32,7 @@ use std::io::Read;
 #[derive(Template)]
 #[template(path = "index.html")]
 struct IndexTemplate {
-    restaurant_list: Vec<String>
+    restaurant_list: Vec<Restaurant>
 }
 
 #[derive(Template)]
@@ -100,14 +100,11 @@ fn create_restaurant(restaurant: &NewRestaurant) -> errors::LunchOrderResult<()>
 }
 
 fn index(_request: &mut Request) -> IronResult<Response> {
-    let restaurant_names = itry!(get_restaurants())
-        .into_iter()
-        .map(|restaurant| restaurant.name)
-        .collect();
+    let restaurant_list = itry!(get_restaurants());
     Ok(
         Response::with((
             status::Ok,
-            IndexTemplate{restaurant_list: restaurant_names},
+            IndexTemplate{restaurant_list: restaurant_list},
         ))
     )
 }
