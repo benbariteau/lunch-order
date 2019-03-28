@@ -15,6 +15,7 @@ use diesel::{
 };
 use diesel::result::ConnectionResult;
 use diesel::sqlite::SqliteConnection;
+use env_logger;
 use iron::{
     Chain,
     Iron,
@@ -23,6 +24,7 @@ use iron::{
     Response,
     status,
 };
+use logger::Logger;
 use router::Router;
 
 #[derive(Template)]
@@ -55,10 +57,10 @@ mod errors {
 
 mod schema {
     table! {
-        post {
+        restaurant {
             id -> Integer,
             name -> VarChar,
-            last_visited_date -> VarChar,
+            last_visit_date -> VarChar,
         }
     }
 }
@@ -69,8 +71,8 @@ fn create_db_connection() -> ConnectionResult<SqliteConnection> {
 
 fn get_restaurants() -> errors::LunchOrderResult<Vec<Restaurant>> {
     let db_connection = create_db_connection()?;
-    let restaurants: Vec<Restaurant> = schema::post::table
-        .order(schema::post::last_visited_date.desc())
+    let restaurants: Vec<Restaurant> = schema::restaurant::table
+        .order(schema::restaurant::last_visit_date.desc())
         .load(&db_connection)?;
     Ok(restaurants)
 }
@@ -89,8 +91,16 @@ fn index(request: &mut Request) -> IronResult<Response> {
 }
 
 fn main() {
+    env_logger::init();
+
     let mut router = Router::new();
     router.get("/", index, "home");
+
     let mut chain = Chain::new(router);
+
+    let (logger_before, logger_after) = Logger::new(None);
+    chain.link_before(logger_before);
+    chain.link_after(logger_after);
+
     Iron::new(chain).http("localhost:8080").unwrap();
 }
