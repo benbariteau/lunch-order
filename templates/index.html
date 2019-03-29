@@ -21,7 +21,7 @@
             </form>
             {% for restaurant in restaurant_list %}
                 <div class="restaurant">
-                    <div class="restaurant-info-container">
+                    <div class="restaurant-info-container level-{{restaurant.level}}">
                         <div class="restaurant-info">
                             {{restaurant.restaurant_model.name|e}}
                         </div>

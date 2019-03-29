@@ -23,11 +23,41 @@ div.restaurant {
     margin: 0.2em;
 }
 
-div.restaurant-info-container {
-    border: 3px solid darkgreen;
-    background-color: lightgreen;
+.restaurant-info-container {
+    border: 3px solid darkgrey;
+    background-color: lightgrey;
     display: flex;
     flex-grow: 1;
+}
+
+.level-0 {
+    background-color: lightgreen;
+    border-color: darkgreen;
+}
+
+.level-1 {
+    background-color: greenyellow;
+    border-color: yellowgreen;
+}
+
+.level-2 {
+    background-color: yellow;
+    border-color: gold;
+}
+
+.level-3 {
+    background-color: orange;
+    border-color: darkorange;
+}
+
+.level-4 {
+    background-color: salmon;
+    border-color: firebrick;
+}
+
+.level-5 {
+    background-color: lightgrey;
+    border-color: grey;
 }
 
 .restaurant-info {
