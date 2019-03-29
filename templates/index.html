@@ -6,9 +6,19 @@
     </head>
     <body>
         <div class="header">
-            <h1 class="title">Lunch Order</h1> <a href="/add" class="add-link">+new</a>
+            <h1 class="title">Lunch Order</h1>
         </div>
         <div>
+            <form action="/add" method="POST" style="display: inline-block; margin-block-end: 0;">
+                <div class="restaurant">
+                    <div class="restaurant-info-container">
+                        <div class="restaurant-info">
+                            <input type="text" name="name">
+                        </div>
+                    </div>
+                    <input type="submit" value="+" class="visit-button">
+                </div>
+            </form>
             {% for restaurant in restaurant_list %}
                 <div class="restaurant">
                     <div class="restaurant-info-container">

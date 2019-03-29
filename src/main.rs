@@ -38,10 +38,6 @@ struct IndexTemplate {
     restaurant_list: Vec<Restaurant>
 }
 
-#[derive(Template)]
-#[template(path = "add.html")]
-struct AddTemplate {}
-
 #[derive(Queryable)]
 struct Restaurant {
     id: i32,
@@ -125,13 +121,6 @@ fn index(_request: &mut Request) -> IronResult<Response> {
     )
 }
 
-fn add_form(_request: &mut Request) -> IronResult<Response> {
-    Ok(Response::with((
-        status::Ok,
-        AddTemplate{},
-    )))
-}
-
 fn add(request: &mut Request) -> IronResult<Response> {
     let mut body = String::new();
     itry!(request.body.read_to_string(&mut body));
@@ -161,7 +150,6 @@ fn main() {
 
     let mut router = Router::new();
     router.get("/", index, "home");
-    router.get("/add", add_form, "add_form");
     router.post("/add", add, "add");
     router.post("/visit/:id", visit, "visit");
 

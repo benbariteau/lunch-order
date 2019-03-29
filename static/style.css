@@ -34,7 +34,6 @@ div.restaurant-info-container {
     border: 3px solid darkgreen;
     background-color: lightgreen;
     display: flex;
-    flex-flow: vertical;
     flex-grow: 1;
 }
 
