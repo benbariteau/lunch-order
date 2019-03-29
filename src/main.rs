@@ -131,8 +131,17 @@ fn index(_request: &mut Request) -> IronResult<Response> {
         .enumerate()
         .map(
             |(i, restaurant)| {
-                let raw_level = ((i as f64) / coefficient).round() as u8;
-                let level = if raw_level > 4 { 4 } else { raw_level };
+                let level = if i < coefficient as usize {
+                    0
+                } else if i < (2.0*coefficient) as usize {
+                    1
+                } else if i < (3.0*coefficient) as usize {
+                    2
+                } else if i < (4.0*coefficient) as usize {
+                    3
+                } else {
+                    4
+                };
                 let last_visit_time: DateTime<Utc> = restaurant.last_visit_time.parse().unwrap();
                 RestaurantPresenter{
                     restaurant_model: restaurant,
