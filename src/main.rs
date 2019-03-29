@@ -6,7 +6,13 @@ extern crate error_chain;
 extern crate iron;
 
 use askama::Template;
-use chrono::offset::Local;
+use chrono::{
+    DateTime,
+    offset::{
+        Local,
+        Utc,
+    },
+};
 use diesel::{
     connection::Connection,
     ExpressionMethods,
@@ -127,10 +133,11 @@ fn index(_request: &mut Request) -> IronResult<Response> {
             |(i, restaurant)| {
                 let raw_level = ((i as f64) / coefficient).round() as u8;
                 let level = if raw_level > 4 { 4 } else { raw_level };
+                let last_visit_time: DateTime<Utc> = restaurant.last_visit_time.parse().unwrap();
                 RestaurantPresenter{
                     restaurant_model: restaurant,
                     level: level,
-                    time_string: format!("visited {} days ago", 3),
+                    time_string: format!("visited {} days ago", (Utc::now() - last_visit_time).num_days()),
                 }
             }
         )
