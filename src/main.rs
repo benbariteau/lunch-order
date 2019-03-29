@@ -60,6 +60,7 @@ struct RestaurantForm {
 struct RestaurantPresenter {
     restaurant_model: Restaurant,
     level: u8,
+    time_string: String,
 }
 
 mod errors {
@@ -129,6 +130,7 @@ fn index(_request: &mut Request) -> IronResult<Response> {
                 RestaurantPresenter{
                     restaurant_model: restaurant,
                     level: level,
+                    time_string: format!("visited {} days ago", 3),
                 }
             }
         )
