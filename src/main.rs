@@ -26,9 +26,11 @@ use iron::{
     status,
 };
 use logger::Logger;
+use mount::Mount;
 use router::Router;
 use serde::Deserialize;
 use std::io::Read;
+use std::path::Path;
 
 #[derive(Template)]
 #[template(path = "index.html")]
@@ -154,7 +156,11 @@ fn main() {
     router.post("/add", add, "add");
     router.post("/visit/:id", visit, "visit");
 
-    let mut chain = Chain::new(router);
+    let mut mount = Mount::new();
+    mount.mount("/", router);
+    mount.mount("/static/", staticfile::Static::new(Path::new("static/")));
+
+    let mut chain = Chain::new(mount);
 
     let (logger_before, logger_after) = Logger::new(None);
     chain.link_before(logger_before);
