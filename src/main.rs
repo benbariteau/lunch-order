@@ -35,7 +35,7 @@ use std::path::Path;
 #[derive(Template)]
 #[template(path = "index.html")]
 struct IndexTemplate {
-    restaurant_list: Vec<Restaurant>
+    restaurant_list: Vec<RestaurantPresenter>
 }
 
 #[derive(Queryable)]
@@ -55,6 +55,11 @@ struct NewRestaurant {
 #[derive(Deserialize)]
 struct RestaurantForm {
     name: String,
+}
+
+struct RestaurantPresenter {
+    restaurant_model: Restaurant,
+    level: u8,
 }
 
 mod errors {
@@ -113,10 +118,14 @@ fn update_restaurant(id: i32, visit_time: String) -> errors::LunchOrderResult<()
 
 fn index(_request: &mut Request) -> IronResult<Response> {
     let restaurant_list = itry!(get_restaurants());
+    let restaurant_presenters = restaurant_list.into_iter().map(|restaurant| RestaurantPresenter{
+        restaurant_model: restaurant,
+        level: 0,
+    }).collect();
     Ok(
         Response::with((
             status::Ok,
-            IndexTemplate{restaurant_list: restaurant_list},
+            IndexTemplate{restaurant_list: restaurant_presenters},
         ))
     )
 }
