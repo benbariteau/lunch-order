@@ -18,13 +18,6 @@ div.header {
     display: inline-block;
 }
 
-.add-link {
-    text-decoration: none;
-    font-size: 2em;
-    color: mediumseagreen;
-    margin: auto 0;
-}
-
 div.restaurant {
     display: flex;
     margin: 0.2em;
