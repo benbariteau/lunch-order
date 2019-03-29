@@ -18,7 +18,7 @@ div.header {
     display: inline-block;
 }
 
-div.restaurant {
+.restaurant {
     display: flex;
     margin: 0.2em;
 }
@@ -72,4 +72,9 @@ div.restaurant {
     background: inherit;
     margin: auto 0;
     height: 2em;
+    min-width: 1.5em;
+}
+
+.add-form {
+    display: inline-block;
 }
