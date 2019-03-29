@@ -49,11 +49,16 @@ struct Restaurant {
     last_visit_time: String,
 }
 
-#[derive(Insertable, Deserialize)]
+#[derive(Insertable)]
 #[table_name = "restaurant"]
 struct NewRestaurant {
     name: String,
     last_visit_time: String,
+}
+
+#[derive(Deserialize)]
+struct RestaurantForm {
+    name: String,
 }
 
 mod errors {
@@ -130,7 +135,11 @@ fn add_form(_request: &mut Request) -> IronResult<Response> {
 fn add(request: &mut Request) -> IronResult<Response> {
     let mut body = String::new();
     itry!(request.body.read_to_string(&mut body));
-    let new_restaurant: NewRestaurant = itry!(serde_urlencoded::from_str(&body));
+    let restaurant_form: RestaurantForm = itry!(serde_urlencoded::from_str(&body));
+    let new_restaurant = NewRestaurant{
+        name: restaurant_form.name,
+        last_visit_time: Local::now().to_rfc3339(),
+    };
     itry!(create_restaurant(&new_restaurant));
     Ok(Response::with((
         status::SeeOther,
