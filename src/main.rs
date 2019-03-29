@@ -46,14 +46,14 @@ struct AddTemplate {}
 struct Restaurant {
     id: i32,
     name: String,
-    last_visit_date: String,
+    last_visit_time: String,
 }
 
 #[derive(Insertable, Deserialize)]
 #[table_name = "restaurant"]
 struct NewRestaurant {
     name: String,
-    last_visit_date: String,
+    last_visit_time: String,
 }
 
 mod errors {
@@ -76,7 +76,7 @@ mod schema {
         restaurant {
             id -> Integer,
             name -> VarChar,
-            last_visit_date -> VarChar,
+            last_visit_time -> VarChar,
         }
     }
 }
@@ -89,7 +89,7 @@ fn create_db_connection() -> ConnectionResult<SqliteConnection> {
 fn get_restaurants() -> errors::LunchOrderResult<Vec<Restaurant>> {
     let db_connection = create_db_connection()?;
     let restaurants: Vec<Restaurant> = schema::restaurant::table
-        .order(schema::restaurant::last_visit_date.desc())
+        .order(schema::restaurant::last_visit_time.desc())
         .load(&db_connection)?;
     Ok(restaurants)
 }
@@ -102,10 +102,10 @@ fn create_restaurant(restaurant: &NewRestaurant) -> errors::LunchOrderResult<()>
     Ok(())
 }
 
-fn update_restaurant(id: i32, visit_date: String) -> errors::LunchOrderResult<()> {
+fn update_restaurant(id: i32, visit_time: String) -> errors::LunchOrderResult<()> {
     let db_connection = create_db_connection()?;
     diesel::update(restaurant::table.find(id))
-        .set(restaurant::last_visit_date.eq(visit_date))
+        .set(restaurant::last_visit_time.eq(visit_time))
         .execute(&db_connection)?;
     Ok(())
 }
