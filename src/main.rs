@@ -118,10 +118,21 @@ fn update_restaurant(id: i32, visit_time: String) -> errors::LunchOrderResult<()
 
 fn index(_request: &mut Request) -> IronResult<Response> {
     let restaurant_list = itry!(get_restaurants());
-    let restaurant_presenters = restaurant_list.into_iter().map(|restaurant| RestaurantPresenter{
-        restaurant_model: restaurant,
-        level: 0,
-    }).collect();
+    let coefficient = (restaurant_list.len() as f64) / 5.0;
+    let restaurant_presenters = restaurant_list
+        .into_iter()
+        .enumerate()
+        .map(
+            |(i, restaurant)| {
+                let raw_level = ((i as f64) / coefficient).round() as u8;
+                let level = if raw_level > 4 { 4 } else { raw_level };
+                RestaurantPresenter{
+                    restaurant_model: restaurant,
+                    level: level,
+                }
+            }
+        )
+        .collect();
     Ok(
         Response::with((
             status::Ok,
