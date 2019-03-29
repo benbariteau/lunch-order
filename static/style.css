@@ -9,6 +9,20 @@ body {
 }
 
 div.header {
+    margin: 0.2em;
+    display: flex;
+}
+
+.title {
+    flex-grow: 1;
+    display: inline-block;
+}
+
+.add-link {
+    text-decoration: none;
+    font-size: 2em;
+    color: mediumseagreen;
+    margin: auto 0;
 }
 
 div.restaurant {
@@ -16,13 +30,18 @@ div.restaurant {
     margin: 0.2em;
 }
 
-div.restaurant-info {
-    padding: 0.8em;
+div.restaurant-info-container {
     border: 3px solid darkgreen;
     background-color: lightgreen;
-    display: inline-block;
+    display: flex;
+    flex-flow: vertical;
     flex-grow: 1;
+}
+
+.restaurant-info {
     margin: auto 0;
+    padding: 0.8em;
+    flex-grow: 1;
 }
 
 .visit-button {

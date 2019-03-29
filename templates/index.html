@@ -6,13 +6,15 @@
     </head>
     <body>
         <div class="header">
-            <a href="/add">Add Restaurant</a>
+            <h1 class="title">Lunch Order</h1> <a href="/add" class="add-link">+new</a>
         </div>
         <div>
             {% for restaurant in restaurant_list %}
                 <div class="restaurant">
-                    <div class="restaurant-info">
-                        {{restaurant.name|e}}
+                    <div class="restaurant-info-container">
+                        <div class="restaurant-info">
+                            {{restaurant.name|e}}
+                        </div>
                     </div>
                     <form action="/visit/{{ restaurant.id }}" method="POST" style="display: inline-block; margin-block-end: 0;">
                         <input type="submit" value="✓" class="visit-button">
