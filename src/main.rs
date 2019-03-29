@@ -90,7 +90,7 @@ fn create_db_connection() -> ConnectionResult<SqliteConnection> {
 fn get_restaurants() -> errors::LunchOrderResult<Vec<Restaurant>> {
     let db_connection = create_db_connection()?;
     let restaurants: Vec<Restaurant> = schema::restaurant::table
-        .order(schema::restaurant::last_visit_time.desc())
+        .order(schema::restaurant::last_visit_time.asc())
         .load(&db_connection)?;
     Ok(restaurants)
 }
