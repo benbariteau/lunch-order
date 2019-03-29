@@ -26,12 +26,12 @@ body {
 
 .level-0 {
     background-color: lightgreen;
-    border-color: darkgreen;
+    border-color: seagreen;
 }
 
 .level-1 {
     background-color: greenyellow;
-    border-color: yellowgreen;
+    border-color: limegreen;
 }
 
 .level-2 {
@@ -40,8 +40,8 @@ body {
 }
 
 .level-3 {
-    background-color: orange;
-    border-color: darkorange;
+    background-color: gold;
+    border-color: orange;
 }
 
 .level-4 {
