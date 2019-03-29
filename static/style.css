@@ -62,8 +62,9 @@ div.header {
 
 .restaurant-info {
     margin: auto 0;
-    padding: 0.8em;
+    padding: 1em;
     flex-grow: 1;
+    display: flex;
 }
 
 .visit-button {
@@ -75,6 +76,7 @@ div.header {
     min-width: 1.5em;
 }
 
-.add-form {
-    display: inline-block;
+.add-form input[type="text"] {
+    border: solid 1px darkgrey;
+    flex-grow: 1;
 }
