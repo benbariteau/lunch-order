@@ -56,6 +56,14 @@ body {
     display: flex;
 }
 
+.restaurant-name {
+    flex-grow: 1;
+}
+
+.visit-time {
+    color: rgba(0, 0, 0, 0.5);
+}
+
 .visit-button {
     font-size: 2em;
     border: none;

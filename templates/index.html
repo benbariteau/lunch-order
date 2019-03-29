@@ -21,7 +21,8 @@
                 <div class="restaurant">
                     <div class="restaurant-info-container level-{{restaurant.level}}">
                         <div class="restaurant-info">
-                            {{restaurant.restaurant_model.name|e}} - {{restaurant.time_string}}
+                            <span class="restaurant-name">{{restaurant.restaurant_model.name|e}}</span>
+                            <span class="visit-time">{{restaurant.time_string}}</span>
                         </div>
                     </div>
                     <form action="/visit/{{ restaurant.restaurant_model.id }}" method="POST" style="display: inline-block; margin-block-end: 0;">
