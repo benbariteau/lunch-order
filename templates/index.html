@@ -6,16 +6,16 @@
     </head>
     <body>
         <div class="header">
-            <h1 class="title">Lunch Order</h1>
+            <h1>Lunch Order</h1>
         </div>
         <div>
             <form action="/add" method="POST" class="restaurant add-form">
-                    <div class="restaurant-info-container">
-                        <div class="restaurant-info">
-                            <input type="text" name="name">
-                        </div>
+                <div class="restaurant-info-container">
+                    <div class="restaurant-info">
+                        <input type="text" name="name">
                     </div>
-                    <input type="submit" value="+" class="visit-button">
+                </div>
+                <input type="submit" value="+" class="visit-button">
             </form>
             {% for restaurant in restaurant_list %}
                 <div class="restaurant">

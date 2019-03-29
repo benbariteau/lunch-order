@@ -8,14 +8,8 @@ body {
     margin: 0 auto;
 }
 
-div.header {
+.header {
     margin: 0.2em;
-    display: flex;
-}
-
-.title {
-    flex-grow: 1;
-    display: inline-block;
 }
 
 .restaurant {
@@ -53,11 +47,6 @@ div.header {
 .level-4 {
     background-color: salmon;
     border-color: firebrick;
-}
-
-.level-5 {
-    background-color: lightgrey;
-    border-color: grey;
 }
 
 .restaurant-info {
