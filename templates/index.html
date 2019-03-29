@@ -1,6 +1,8 @@
 <html>
     <head>
         <title>Lunch Order</title>
+        <link href="/static/style.css" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
         <div>
@@ -8,9 +10,12 @@
         </div>
         <div>
             {% for restaurant in restaurant_list %}
-                <li>{{restaurant.name|e}}
-                    <form action="/visit/{{ restaurant.id }}" method="POST" style="display: inline-block; margin-block-end: 0;"><input type="submit" value="mark visited"></form>
-                </li>
+                <div class="restaurant">
+                    {{restaurant.name|e}}
+                    <form action="/visit/{{ restaurant.id }}" method="POST" style="display: inline-block; margin-block-end: 0;">
+                        <input type="submit" value="✓" class="visit-button">
+                    </form>
+                </div>
             {% endfor %}
         </div>
     </body>

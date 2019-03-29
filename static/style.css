@@ -1,0 +1,15 @@
+body {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+div.restaurant {
+    margin: 0.2em;
+    padding: 0.8em;
+    border: 3px solid darkgreen;
+    background-color: lightgreen;
+}
+
+.visit-button {
+    font-size: xx-large;
+}
