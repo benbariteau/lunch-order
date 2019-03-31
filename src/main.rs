@@ -137,7 +137,7 @@ struct NewRestaurantForm {
     name: String,
 }
 
-fn add(request: &mut Request) -> IronResult<Response> {
+fn add_restaurant(request: &mut Request) -> IronResult<Response> {
     let mut body = String::new();
     itry!(request.body.read_to_string(&mut body));
     let restaurant_form: NewRestaurantForm = itry!(serde_urlencoded::from_str(&body));
@@ -166,7 +166,7 @@ fn main() {
 
     let mut router = Router::new();
     router.get("/", index, "home");
-    router.post("/add", add, "add");
+    router.post("/restaurant", add_restaurant, "add_restaurant");
     router.post("/visit/:id", visit, "visit");
 
     let mut mount = Mount::new();
