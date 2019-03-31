@@ -38,24 +38,13 @@ use serde::Deserialize;
 use std::io::Read;
 use std::path::Path;
 
+mod model;
+mod schema;
+
 #[derive(Template)]
 #[template(path = "index.html")]
 struct IndexTemplate {
     restaurant_list: Vec<RestaurantPresenter>
-}
-
-#[derive(Queryable)]
-struct Restaurant {
-    id: i32,
-    name: String,
-    last_visit_time: String,
-}
-
-#[derive(Insertable)]
-#[table_name = "restaurant"]
-struct NewRestaurant {
-    name: String,
-    last_visit_time: String,
 }
 
 #[derive(Deserialize)]
@@ -64,7 +53,7 @@ struct RestaurantForm {
 }
 
 struct RestaurantPresenter {
-    restaurant_model: Restaurant,
+    restaurant_model: model::Restaurant,
     level: u8,
     time_string: String,
 }
@@ -84,30 +73,19 @@ mod errors {
     }
 }
 
-mod schema {
-    table! {
-        restaurant {
-            id -> Integer,
-            name -> VarChar,
-            last_visit_time -> VarChar,
-        }
-    }
-}
-use self::schema::restaurant;
-
 fn create_db_connection() -> ConnectionResult<SqliteConnection> {
     SqliteConnection::establish("lunch_order.db")
 }
 
-fn get_restaurants() -> errors::LunchOrderResult<Vec<Restaurant>> {
+fn get_restaurants() -> errors::LunchOrderResult<Vec<model::Restaurant>> {
     let db_connection = create_db_connection()?;
-    let restaurants: Vec<Restaurant> = schema::restaurant::table
+    let restaurants: Vec<model::Restaurant> = schema::restaurant::table
         .order(schema::restaurant::last_visit_time.asc())
         .load(&db_connection)?;
     Ok(restaurants)
 }
 
-fn create_restaurant(restaurant: &NewRestaurant) -> errors::LunchOrderResult<()> {
+fn create_restaurant(restaurant: &model::NewRestaurant) -> errors::LunchOrderResult<()> {
     let db_connection = create_db_connection()?;
     diesel::insert_into(schema::restaurant::table)
         .values(restaurant)
@@ -117,8 +95,8 @@ fn create_restaurant(restaurant: &NewRestaurant) -> errors::LunchOrderResult<()>
 
 fn update_restaurant(id: i32, visit_time: String) -> errors::LunchOrderResult<()> {
     let db_connection = create_db_connection()?;
-    diesel::update(restaurant::table.find(id))
-        .set(restaurant::last_visit_time.eq(visit_time))
+    diesel::update(schema::restaurant::table.find(id))
+        .set(schema::restaurant::last_visit_time.eq(visit_time))
         .execute(&db_connection)?;
     Ok(())
 }
@@ -163,7 +141,7 @@ fn add(request: &mut Request) -> IronResult<Response> {
     let mut body = String::new();
     itry!(request.body.read_to_string(&mut body));
     let restaurant_form: RestaurantForm = itry!(serde_urlencoded::from_str(&body));
-    let new_restaurant = NewRestaurant{
+    let new_restaurant = model::NewRestaurant{
         name: restaurant_form.name,
         last_visit_time: Local::now().to_rfc3339(),
     };
