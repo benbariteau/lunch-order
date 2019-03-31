@@ -44,6 +44,7 @@ mod schema;
 #[derive(Template)]
 #[template(path = "index.html")]
 struct IndexTemplate {
+    logged_in: bool,
     restaurant_list: Vec<RestaurantPresenter>,
 }
 
@@ -128,6 +129,7 @@ fn index(_request: &mut Request) -> IronResult<Response> {
         Response::with((
             status::Ok,
             IndexTemplate{
+                logged_in: false,
                 restaurant_list: restaurant_presenters,
             },
         ))

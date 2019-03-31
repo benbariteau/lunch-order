@@ -3,25 +3,34 @@
 {% block title %}Lunch Order{% endblock %}
 
 {% block content %}
-    <form action="/restaurant" method="POST" class="restaurant add-form">
-        <div class="restaurant-info-container">
-            <div class="restaurant-info">
-                <input type="text" name="name">
-            </div>
-        </div>
-        <input type="submit" value="+" class="visit-button">
-    </form>
-    {% for restaurant in restaurant_list %}
-        <div class="restaurant">
-            <div class="restaurant-info-container level-{{restaurant.level}}">
+    <div class="header">
+        {% if logged_in %}
+            <a href="/logout">Logout</a>
+        {% else %}
+            <a href="/login">Login</a> | <a href="/register">Register</a>
+        {% endif %}
+    </div>
+    <div class="content">
+        <form action="/restaurant" method="POST" class="restaurant add-form">
+            <div class="restaurant-info-container">
                 <div class="restaurant-info">
-                    <span class="restaurant-name">{{restaurant.restaurant_model.name|e}}</span>
-                    <span class="visit-time">{{restaurant.time_string}}</span>
+                    <input type="text" name="name">
                 </div>
             </div>
-            <form action="/visit/{{ restaurant.restaurant_model.id }}" method="POST" style="display: inline-block; margin-block-end: 0;">
-                <input type="submit" value="✓" class="visit-button">
-            </form>
-        </div>
-    {% endfor %}
+            <input type="submit" value="+" class="visit-button">
+        </form>
+        {% for restaurant in restaurant_list %}
+            <div class="restaurant">
+                <div class="restaurant-info-container level-{{restaurant.level}}">
+                    <div class="restaurant-info">
+                        <span class="restaurant-name">{{restaurant.restaurant_model.name|e}}</span>
+                        <span class="visit-time">{{restaurant.time_string}}</span>
+                    </div>
+                </div>
+                <form action="/visit/{{ restaurant.restaurant_model.id }}" method="POST" style="display: inline-block; margin-block-end: 0;">
+                    <input type="submit" value="✓" class="visit-button">
+                </form>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}
