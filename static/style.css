@@ -77,3 +77,36 @@ body {
     border: solid 1px darkgrey;
     flex-grow: 1;
 }
+
+.register-form {
+    padding: 1em;
+    border: 3px solid seagreen;
+    background-color: lightgreen;
+    margin: 1em;
+}
+
+.register-form input[type="submit"]{
+    margin: 0.1em auto;
+}
+
+.register-form-element {
+    display: flex;
+}
+
+.register-form-element input {
+    margin: 0.2em;
+}
+
+.register-form-element label {
+    width: 100px;
+    text-align: right;
+    margin: 0.2em;
+}
+
+.register-form-element input {
+    flex-grow: 1;
+}
+
+.register-button-container {
+    text-align: right;
+}

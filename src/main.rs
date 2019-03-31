@@ -48,6 +48,10 @@ struct IndexTemplate {
     restaurant_list: Vec<RestaurantPresenter>,
 }
 
+#[derive(Template)]
+#[template(path = "register.html")]
+struct RegisterTemplate {}
+
 struct RestaurantPresenter {
     restaurant_model: model::Restaurant,
     level: u8,
@@ -165,6 +169,13 @@ fn visit(request: &mut Request) -> IronResult<Response> {
     )))
 }
 
+fn register_form(request: &mut Request) -> IronResult<Response> {
+    Ok(Response::with((
+        status::Ok,
+        RegisterTemplate{},
+    )))
+}
+
 fn main() {
     env_logger::init();
 
@@ -172,6 +183,7 @@ fn main() {
     router.get("/", index, "home");
     router.post("/restaurant", add_restaurant, "add_restaurant");
     router.post("/visit/:id", visit, "visit");
+    router.get("/register", register_form, "register_form");
 
     let mut mount = Mount::new();
     mount.mount("/", router);
