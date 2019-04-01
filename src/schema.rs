@@ -9,7 +9,7 @@ table! {
 table! {
     user {
         id -> Integer,
-        name -> VarChar,
+        username -> VarChar,
     }
 }
 
