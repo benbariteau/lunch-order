@@ -169,7 +169,7 @@ fn visit(request: &mut Request) -> IronResult<Response> {
     )))
 }
 
-fn register_form(request: &mut Request) -> IronResult<Response> {
+fn register_form(_request: &mut Request) -> IronResult<Response> {
     Ok(Response::with((
         status::Ok,
         RegisterTemplate{},
