@@ -35,7 +35,6 @@ use logger::Logger;
 use mount::Mount;
 use router::Router;
 use serde::Deserialize;
-use std::io::Read;
 use std::path::Path;
 
 mod model;
