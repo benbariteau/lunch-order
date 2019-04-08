@@ -146,9 +146,7 @@ struct NewRestaurantForm {
 }
 
 fn add_restaurant(request: &mut Request) -> IronResult<Response> {
-    let mut body = String::new();
-    itry!(request.body.read_to_string(&mut body));
-    let restaurant_form: NewRestaurantForm = itry!(serde_urlencoded::from_str(&body));
+    let restaurant_form: NewRestaurantForm = itry!(serde_urlencoded::from_reader(&mut request.body));
     let new_restaurant = model::NewRestaurant{
         name: restaurant_form.name,
         last_visit_time: Local::now().to_rfc3339(),
