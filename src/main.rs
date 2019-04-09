@@ -259,7 +259,8 @@ fn login(request: &mut Request) -> IronResult<Response> {
     if itry!(bcrypt::verify(login_form.password, &user_private.password_hash)) {
         Ok(Response::with((
             Header(SetCookie(vec![format!("session={}", user_id)])),
-            "logged in!",
+            RedirectRaw("/".to_owned()),
+            status::SeeOther,
         )))
     } else {
         Ok(Response::with(
