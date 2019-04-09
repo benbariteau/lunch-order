@@ -24,9 +24,13 @@ use diesel::{
 use env_logger;
 use iron::{
     Chain,
+    headers::SetCookie,
     Iron,
     IronResult,
-    modifiers::RedirectRaw,
+    modifiers::{
+        Header,
+        RedirectRaw,
+    },
     Request,
     Response,
     status,
@@ -252,9 +256,10 @@ fn login(request: &mut Request) -> IronResult<Response> {
     let user_id = itry!(get_user_by_username(&login_form.username)).id;
     let user_private = itry!(get_user_private_by_user_id(user_id));
     if itry!(bcrypt::verify(login_form.password, &user_private.password_hash)) {
-        Ok(Response::with(
-            "logged in!"
-        ))
+        Ok(Response::with((
+            Header(SetCookie(vec![format!("session={}", user_id)])),
+            "logged in!",
+        )))
     } else {
         Ok(Response::with(
             "failed to log in!"
