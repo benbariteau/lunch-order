@@ -235,6 +235,7 @@ fn register(request: &mut Request) -> IronResult<Response> {
     Ok(Response::with((
         status::SeeOther,
         RedirectRaw("/".to_owned()),
+        Header(SetCookie(vec![format!("session={}", user_id)])),
     )))
 }
 
