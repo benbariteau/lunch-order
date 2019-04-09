@@ -204,8 +204,9 @@ struct NewUserForm {
 
 fn register(request: &mut Request) -> IronResult<Response> {
     let user_form: NewUserForm = itry!(serde_urlencoded::from_reader(&mut request.body));
+    let password_hash = itry!(bcrypt::hash(user_form.password, bcrypt::DEFAULT_COST));
     let user_id = itry!(create_user(&model::NewUser{username: user_form.username}));
-    itry!(create_user_private(&model::NewUserPrivate{user_id: user_id, password_hash: user_form.password}));
+    itry!(create_user_private(&model::NewUserPrivate{user_id: user_id, password_hash: password_hash}));
     Ok(Response::with((
         status::SeeOther,
         RedirectRaw("/".to_owned()),
