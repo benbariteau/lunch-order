@@ -127,6 +127,22 @@ fn create_user_private(user_private: &model::NewUserPrivate) -> errors::LunchOrd
     Ok(())
 }
 
+fn get_user_by_username(username: &String) -> errors::LunchOrderResult<model::User> {
+    let db_connection = create_db_connection()?;
+    let user = schema::user::table
+        .filter(schema::user::username.eq(username))
+        .get_result(&db_connection)?;
+    Ok(user)
+}
+
+fn get_user_private_by_user_id(user_id: i32) -> errors::LunchOrderResult<model::UserPrivate> {
+    let db_connection = create_db_connection()?;
+    let user_private = schema::user_private::table
+        .filter(schema::user_private::user_id.eq(user_id))
+        .get_result(&db_connection)?;
+    Ok(user_private)
+}
+
 fn index(_request: &mut Request) -> IronResult<Response> {
     let restaurant_list = itry!(get_restaurants());
     let coefficient = (restaurant_list.len() as f64) / 5.0;
@@ -225,6 +241,27 @@ fn login_form(_request: &mut Request) -> IronResult<Response> {
     )))
 }
 
+#[derive(Deserialize)]
+struct LoginForm {
+    username: String,
+    password: String,
+}
+
+fn login(request: &mut Request) -> IronResult<Response> {
+    let login_form: LoginForm = itry!(serde_urlencoded::from_reader(&mut request.body));
+    let user_id = itry!(get_user_by_username(&login_form.username)).id;
+    let user_private = itry!(get_user_private_by_user_id(user_id));
+    if itry!(bcrypt::verify(login_form.password, &user_private.password_hash)) {
+        Ok(Response::with(
+            "logged in!"
+        ))
+    } else {
+        Ok(Response::with(
+            "failed to log in!"
+        ))
+    }
+}
+
 
 fn main() {
     env_logger::init();
@@ -236,6 +273,7 @@ fn main() {
     router.get("/register", register_form, "register_form");
     router.post("/register", register, "register");
     router.get("/login", login_form, "login_form");
+    router.post("/login", login, "login");
 
     let mut mount = Mount::new();
     mount.mount("/", router);
