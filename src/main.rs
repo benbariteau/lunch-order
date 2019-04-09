@@ -56,7 +56,7 @@ struct IndexTemplate {
 struct RegisterTemplate {}
 
 #[derive(Template)]
-#[template(path = "register.html")]
+#[template(path = "login.html")]
 struct LoginTemplate {}
 
 struct RestaurantPresenter {

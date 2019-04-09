@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Login | Lunch Order{% endblock %}
+
+{% block content %}
+    <form action="" method="post" class="register-form">
+        <div class="register-form-element">
+            <label for="username">Username</label><input type="text" name="username">
+        </div>
+        <div class="register-form-element">
+            <label for="password">Password</label><input type="password" name="password">
+        </div>
+        <div class="register-button-container">
+            <input type="submit" value="Login">
+        </div>
+    </form>
+{% endblock %}
