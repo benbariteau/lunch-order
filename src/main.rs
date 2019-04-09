@@ -100,6 +100,29 @@ fn update_restaurant(id: i32, visit_time: String) -> errors::LunchOrderResult<()
     Ok(())
 }
 
+fn create_user(user: &model::NewUser) -> errors::LunchOrderResult<i32> {
+    let db_connection = create_db_connection()?;
+    let user_id = db_connection.transaction(|| -> errors::LunchOrderResult<i32> {
+        diesel::insert_into(schema::user::table)
+            .values(user)
+            .execute(&db_connection)?;
+        let user_id = schema::user::table
+            .select(schema::user::id)
+            .order(schema::user::id.desc())
+            .first(&db_connection)?;
+        Ok(user_id)
+    })?;
+    Ok(user_id)
+}
+
+fn create_user_private(user_private: &model::NewUserPrivate) -> errors::LunchOrderResult<()> {
+    let db_connection = create_db_connection()?;
+    diesel::insert_into(schema::user_private::table)
+        .values(user_private)
+        .execute(&db_connection)?;
+    Ok(())
+}
+
 fn index(_request: &mut Request) -> IronResult<Response> {
     let restaurant_list = itry!(get_restaurants());
     let coefficient = (restaurant_list.len() as f64) / 5.0;
@@ -173,6 +196,23 @@ fn register_form(_request: &mut Request) -> IronResult<Response> {
     )))
 }
 
+#[derive(Deserialize)]
+struct NewUserForm {
+    username: String,
+    password: String,
+}
+
+fn register(request: &mut Request) -> IronResult<Response> {
+    let user_form: NewUserForm = itry!(serde_urlencoded::from_reader(&mut request.body));
+    let user_id = itry!(create_user(&model::NewUser{username: user_form.username}));
+    itry!(create_user_private(&model::NewUserPrivate{user_id: user_id, password_hash: user_form.password}));
+    Ok(Response::with((
+        status::SeeOther,
+        RedirectRaw("/".to_owned()),
+    )))
+}
+
+
 fn main() {
     env_logger::init();
 
@@ -181,6 +221,7 @@ fn main() {
     router.post("/restaurant", add_restaurant, "add_restaurant");
     router.post("/visit/:id", visit, "visit");
     router.get("/register", register_form, "register_form");
+    router.post("/register", register, "register");
 
     let mut mount = Mount::new();
     mount.mount("/", router);
